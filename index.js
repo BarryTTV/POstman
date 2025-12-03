@@ -10,20 +10,17 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-//Crear una carta
-app.post("/CreateCard", async (req, res) => {
+// Crear una carta
+app.post("/createCard", async (req, res) => {
     try {
         const { name, link, description } = req.body || {};
 
-        // Validar campos obligatorios
         if (!name || !link) {
             return res.status(400).json({ message: "El nombre y el link son obligatorios." });
         }
 
-        // Crear la carta en MongoDB
         const card = await Card.create({ name, link, description });
 
-        // Responder con la carta creada
         res.status(201).json({
             message: "Carta creada exitosamente.",
             data: card
@@ -34,12 +31,11 @@ app.post("/CreateCard", async (req, res) => {
     }
 });
 
-//Actualizar una carta existente por su ID
-app.put("/UpdateCard/:id", async (req, res) => {
+// Actualizar una carta (PATCH) 
+app.patch("/updateCard/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Actualizar la carta y devolver la versión nueva
         const updatedCard = await Card.findByIdAndUpdate(id, req.body, {
             new: true,
             runValidators: true
@@ -59,8 +55,8 @@ app.put("/UpdateCard/:id", async (req, res) => {
     }
 });
 
-//Eliminar una carta con su ID
-app.delete("/Delete/:id", async (req, res) => {
+// Eliminar una carta
+app.delete("/deleteCard/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -80,8 +76,8 @@ app.delete("/Delete/:id", async (req, res) => {
     }
 });
 
-//Obtener una carta por el ID
-app.get("/GetCard/:id", async (req, res) => {
+// Obtener una carta por ID
+app.get("/getCard/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -101,8 +97,8 @@ app.get("/GetCard/:id", async (req, res) => {
     }
 });
 
-//Obtener todas las cartas
-app.get("/GetAllCards", async (req, res) => {
+// Obtener todas las cartas
+app.get("/getAllCards", async (req, res) => {
     try {
         const cards = await Card.find();
 
@@ -117,7 +113,26 @@ app.get("/GetAllCards", async (req, res) => {
     }
 });
 
-//Iniciar servidor en el puerto 3000
+app.get("/endpoints", (req, res) => {
+
+    const message = `
+Endpoints disponibles:
+
+Cards:
+- POST   https://postman-fqen.onrender.com/createCard
+- GET    https://postman-fqen.onrender.com/getAllCards
+- GET    https://postman-fqen.onrender.com/getCard/:id
+- PATCH  https://postman-fqen.onrender.com/updateCard/:id
+- DELETE https://postman-fqen.onrender.com/deleteCard/:id
+
+Este endpoint:
+- GET    https://postman-fqen.onrender.com/endpoints
+`;
+
+    res.status(200).send(message);
+});
+
+// Puerto
 app.listen(3000, () => {
     console.log("Servidor ejecutándose en http://localhost:3000");
 });
