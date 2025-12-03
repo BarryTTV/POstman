@@ -16,10 +16,13 @@ const cardSchema = new mongoose.Schema(
             type: String,
             trim: true,
         },
+        like: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
     }
 );
-
 export const Card = mongoose.model("Card", cardSchema);

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-dotenv.config(); // Cargar variables del archivo .env
+dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI; // Leer la variable desde .env
+const MONGO_URI = process.env.MONGO_URI;
 
 export const connectDB = async () => {
     try {
